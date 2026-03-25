@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Login – Greenfield Local Hub{% endblock %}
+
+{% block content %}
+<div class="auth-bg">
+    <div class="auth-card">
+        <div class="auth-logo">
+            <span class="auth-logo-name">Greenfield Local Hub</span>
+        </div>
+        <h2>Create Account</h2>
+        <p class="auth-sub">Join our community of local food lovers.</p>
+        <form method="POST">
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" name="first_name" required placeholder="Jane">
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" name="last_name" required placeholder="Smith">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" name="email" required placeholder="you@example.com">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" required placeholder="At least 8 characters">
+            </div>
+            <div class="form-group">
+                <label>Confirm Password</label>
+                <input type="password" name="confirm_password" required placeholder="Repeat your password">
+            </div>
+            <div class="form-group">
+                <label>Account Type</label>
+                <select name="role">
+                    <option value="customer">Customer</option>
+                    <option value="producer">Producer</option>
+                </select>
+            </div>
+            <button type="submit" class="btn-submit">Create Account</button>
+        </form>
+        <p class="auth-footer-note">
+            Already have an account? <a href="{{ url_for('login') }}">Sign in</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
