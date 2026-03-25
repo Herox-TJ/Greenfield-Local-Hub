@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Greenfield Local Hub – Fresh Local Food{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Fresh Food from Local Producers</h1>
+    <p>Support your local community. Shop direct from farmers near you.</p>
+    <div class="hero-btns">
+        <a href="{{ url_for('register') }}" class="btn-hero-primary">Get Started</a>
+        <a href="{{ url_for('login') }}" class="btn-hero-outline">Log In</a>
+    </div>
+</section>
+
+<section class="section">
+    <h2 class="sec-title">Welcome to Greenfield Local Hub</h2>
+    <p class="sec-sub">A marketplace connecting local farmers with the community.</p>
+    <p style="text-align:center;color:#666;max-width:600px;margin:0 auto;">
+        Browse fresh produce, dairy, bakery items and more — all sourced locally.
+        Create an account to start shopping or register as a producer to sell your products.
+    </p>
+</section>
+{% endblock %}
