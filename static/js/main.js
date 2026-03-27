@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    // ── auto-dismiss flash messages after 4 s ────────────────────────────────
+    // auto-dismiss flash messages after 4 seconds
     setTimeout(function () {
         document.querySelectorAll('.flash').forEach(function (el) {
             el.style.transition = 'opacity .5s';
@@ -10,4 +10,3 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 4000);
 
 });
- 

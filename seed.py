@@ -16,7 +16,7 @@ def seed():
         User.query.delete()
         db.session.commit()
 
-        # users
+        # users 
         admin = User(first_name='Gabby', last_name='Admin',
                      email='admin@greenfield.com', role='admin')
         admin.set_password('Admin123!')
@@ -34,5 +34,4 @@ def seed():
 
 
 if __name__ == '__main__':
-    seed()
- 
+    seed() 

@@ -12,7 +12,6 @@ db.init_app(app)
 
 
 # helpers
-
 def get_current_user():
     if 'user_id' in session:
         return db.session.get(User, session['user_id'])
@@ -31,11 +30,9 @@ def login_required(f):
 
 @app.context_processor
 def inject_globals():
-    return {'current_user': get_current_user()}
-
+    return {'current_user': get_current_user(), 'cart_count': 0}
 
 # routes
-
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -97,8 +94,16 @@ def logout():
     return redirect(url_for('index'))
 
 
-# init
+@app.route('/privacy')
+def privacy():
+    return render_template('privacy.html')
 
+
+@app.route('/terms')
+def terms():
+    return render_template('terms.html')
+
+# init
 with app.app_context():
     db.create_all()
 
