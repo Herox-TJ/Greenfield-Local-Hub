@@ -20,13 +20,23 @@
 
     <div class="nav-links" id="nav-links">
         <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('products') }}">Products</a>
+        <a href="{{ url_for('producers') }}">Producers</a>
+        <a href="{{ url_for('about') }}">About Us</a>
+        <a href="{{ url_for('contact') }}">Contact Us</a>
     </div>
 
     <div class="nav-right">
+        <a href="{{ url_for('cart') }}" class="nav-cart">
+            <img src="{{ url_for('static', filename='images/icons/shopping-cart.svg') }}" alt="cart" class="icon-svg">
+            {% if cart_count > 0 %}
+            <span class="cart-badge">{{ cart_count }}</span>
+            {% endif %}
+        </a>
         {% if current_user %}
         <div class="nav-user-info">
-            <div class="nav-user-icon">{{ current_user.first_name[0] }}</div>
-            <span>{{ current_user.first_name }}</span>
+            <div class="nav-user-icon">{{ current_user.initials }}</div>
+            <span>{{ current_user.first_name }} {{ current_user.last_name[0] }}.</span>
         </div>
         <a href="{{ url_for('logout') }}" class="nav-logout" title="Logout"><img src="{{ url_for('static', filename='images/icons/log-in.svg') }}" alt="login" class="icon-svg"></a>
         {% else %}
@@ -66,6 +76,8 @@
 
         <div class="footer-col">
             <h4>Quick Links</h4>
+            <a href="{{ url_for('products') }}">Browse Products</a>
+            <a href="{{ url_for('producers') }}">Our Producers</a>
             <a href="{{ url_for('register') }}">Create Account</a>
             <a href="{{ url_for('login') }}">Login</a>
         </div>
@@ -80,12 +92,12 @@
         <div class="footer-col">
             <h4>Follow Us</h4>
             <div class="footer-social">
-                <a href="https://en-gb.facebook.com/" class="soc-icon">f</a>
-                <a href="https://x.com/?lang=en-gb" class="soc-icon">t</a>
-                <a href="https://www.instagram.com/" class="soc-icon">in</a>
+                <a href="#" class="soc-icon">f</a>
+                <a href="#" class="soc-icon">t</a>
+                <a href="#" class="soc-icon">in</a>
             </div>
             <a href="{{ url_for('privacy') }}">Privacy Policy</a>
-            <a href="{{ url_for('terms') }}">Terms & Conditions</a>
+            <a href="{{ url_for('terms') }}">Terms &amp; Conditions</a>
         </div>
     </div>
     <div class="footer-bottom">
@@ -94,5 +106,10 @@
 </footer>
 
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script
+  src="https://static.getwcag.com/widget.js"
+  config-url="https://static.getwcag.com/configs/vRyriYSxWjATrlPonQco/config.json"
+  use-important="false"
+></script>
 </body>
 </html>

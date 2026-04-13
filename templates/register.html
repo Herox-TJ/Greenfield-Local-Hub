@@ -1,49 +1,82 @@
 {% extends 'base.html' %}
-{% block title %}Register – Greenfield Local Hub{% endblock %}
+{% block title %}Create Account - Greenfield Local Hub{% endblock %}
 
 {% block content %}
 <div class="auth-bg">
     <div class="auth-card">
         <div class="auth-logo">
-            <span class="auth-logo-name">Greenfield Local Hub</span>
+            <div class="auth-logo-icon"><img src="{{ url_for('static', filename='images/icons/leaf.svg') }}" alt="leaf" class="icon-svg"></div>
+            <span class="auth-logo-name">Greenfield</span>
+            <span class="auth-logo-sub">Local Hub</span>
         </div>
+
         <h2>Create Account</h2>
-        <p class="auth-sub">Join our community of local food lovers.</p>
-        <form method="POST">
+        <p class="auth-sub">Join our local food community</p>
+
+        <form method="POST" action="{{ url_for('register') }}">
             <div class="form-row-2">
                 <div class="form-group">
-                    <label>First Name</label>
-                    <input type="text" name="first_name" required placeholder="Jane">
+                    <label for="first_name">First Name</label>
+                    <input type="text" id="first_name" name="first_name"
+                           placeholder="John" required>
                 </div>
                 <div class="form-group">
-                    <label>Last Name</label>
-                    <input type="text" name="last_name" required placeholder="Smith">
+                    <label for="last_name">Last Name</label>
+                    <input type="text" id="last_name" name="last_name"
+                           placeholder="Doe" required>
                 </div>
             </div>
+
             <div class="form-group">
-                <label>Email Address</label>
-                <input type="email" name="email" required placeholder="you@example.com">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email"
+                       placeholder="you@example.com" required>
             </div>
+
             <div class="form-group">
-                <label>Password</label>
-                <input type="password" name="password" required placeholder="At least 8 characters">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
             </div>
+
             <div class="form-group">
-                <label>Confirm Password</label>
-                <input type="password" name="confirm_password" required placeholder="Repeat your password">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
             </div>
+
             <div class="form-group">
-                <label>Account Type</label>
-                <select name="role">
-                    <option value="customer">Customer</option>
-                    <option value="producer">Producer</option>
+                <label for="role">I am a...</label>
+                <select id="role" name="role">
+                    <option value="customer">Customer - Shop for local produce and support your community</option>
+                    <option value="producer">Producer - Sell your products to local customers</option>
                 </select>
             </div>
-            <button type="submit" class="btn-submit">Create Account</button>
+
+            <div class="form-group">
+                <label for="security_question">Security Question</label>
+                <select id="security_question" name="security_question">
+                    <option value="">Choose a Security Question</option>
+                    <option value="What was the name of your first pet?">What was the name of your first pet?</option>
+                    <option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
+                    <option value="What was the name of your first school?">What was the name of your first school?</option>
+                    <option value="What is your favourite book?">What is your favourite book?</option>
+                    <option value="What city were you born in?">What city were you born in?</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="security_answer">Your Answer</label>
+                <input type="text" id="security_answer" name="security_answer"
+                       placeholder="Enter your answer">
+                <div class="form-hint">Remember this answer - it's case-insensitive</div>
+            </div>
+
+            <button type="submit" class="btn-submit"><img src="{{ url_for('static', filename='images/icons/user.svg') }}" alt="user" class="icon-svg"> Create Account</button>
         </form>
+
         <p class="auth-footer-note">
-            Already have an account? <a href="{{ url_for('login') }}">Sign in</a>
+            Already have an account?
+            <a href="{{ url_for('login') }}">Sign in</a>
         </p>
     </div>
 </div>
-{% endblock %}
+{% endblock %} 

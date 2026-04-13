@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% block title %}Contact Us - Greenfield Local Hub{% endblock %}
+
+{% block content %}
+
+<section class="contact-hero">
+    <h1>Contact Us</h1>
+    <p>We'd love to hear from you. Get in touch with our team.</p>
+</section>
+
+<div class="contact-body">
+    <!-- left: contact info -->
+    <div>
+        <h2 style="font-size:1.3rem; font-weight:700; margin-bottom:1.5rem;">Get In Touch</h2>
+
+        <div class="contact-info-item">
+            <div class="ci-icon">
+                <img src="{{ url_for('static', filename='images/icons/map-pin.svg') }}" alt="location" class="icon-svg">
+            </div>
+            <div class="ci-text">
+                <h4>Visit Us</h4>
+                <p>123 Green Street<br>Greenfield, GF1 2AB<br>United Kingdom</p>
+            </div>
+        </div>
+
+        <div class="contact-info-item">
+            <div class="ci-icon">
+                <img src="{{ url_for('static', filename='images/icons/phone.svg') }}" alt="phone" class="icon-svg">
+            </div>
+            <div class="ci-text">
+                <h4>Call Us</h4>
+                <p>+44 (0) 1234 567 890</p>
+                <p>Mon-Fri: 9am-6pm</p>
+            </div>
+        </div>
+
+        <div class="contact-info-item">
+            <div class="ci-icon">
+                <img src="{{ url_for('static', filename='images/icons/mail.svg') }}" alt="mail" class="icon-svg">
+            </div>
+            <div class="ci-text">
+                <h4>Email Us</h4>
+                <a href="mailto:hello@greenfieldlocalhub.co.uk">hello@greenfieldlocalhub.co.uk</a>
+            </div>
+        </div>
+
+        <div class="contact-info-item">
+            <div class="ci-icon">
+                <img src="{{ url_for('static', filename='images/icons/clock-4.svg') }}" alt="clock" class="icon-svg">
+            </div>
+            <div class="ci-text">
+                <h4>Opening Hours</h4>
+                <p>Monday - Friday: 8am - 6pm</p>
+                <p>Saturday: 10am - 4pm</p>
+                <p>Sunday: Closed</p>
+            </div>
+        </div>
+
+        <div class="faq-box">
+            <h4>Looking for quick answers?</h4>
+            <p>Check out our FAQ section for common questions about ordering, delivery, and more.</p>
+            <a href="#" class="faq-link">View FAQs <img src="{{ url_for('static', filename='images/icons/arrow-right.svg') }}" alt="arrow right" class="icon-svg"></a>
+        </div>
+    </div>
+
+    <!-- right: form -->
+    <div class="contact-form-card">
+        <h2>Send Us a Message</h2>
+        <form method="POST" action="{{ url_for('contact') }}">
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label for="name">Your Name *</label>
+                    <input type="text" id="name" name="name" placeholder="John Smith" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" placeholder="john@example.com" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="subject">Subject *</label>
+                <input type="text" id="subject" name="subject" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Message *</label>
+                <textarea id="message" name="message"
+                          placeholder="Tell us how we can help..." required></textarea>
+            </div>
+            <button type="submit" class="btn-send"><img src="{{ url_for('static', filename='images/icons/mail.svg') }}" alt="mail" class="icon-svg"> Send Message</button>
+        </form>
+    </div>
+</div>
+
+<!-- other ways to connect -->
+<section class="connect-section">
+    <div class="container">
+        <h2 class="sec-title">Other Ways to Connect</h2>
+        <p class="sec-sub" style="margin-bottom:2rem;"></p>
+        <div class="connect-grid">
+            <div class="connect-card">
+                <h3>For Customers</h3>
+                <p>Questions about orders, delivery, or products? Our customer support team is here to help.</p>
+                <a href="mailto:support@greenfieldlocalhub.co.uk">support@greenfieldlocalhub.co.uk</a>
+            </div>
+            <div class="connect-card">
+                <h3>For Producers</h3>
+                <p>Interested in selling your products through our platform? We'd love to hear from you.</p>
+                <a href="mailto:producers@greenfieldlocalhub.co.uk">producers@greenfieldlocalhub.co.uk</a>
+            </div>
+            <div class="connect-card">
+                <h3>For Press &amp; Media</h3>
+                <p>Media inquiries and press-related questions can be directed to our communications team.</p>
+                <a href="mailto:press@greenfieldlocalhub.co.uk">press@greenfieldlocalhub.co.uk</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

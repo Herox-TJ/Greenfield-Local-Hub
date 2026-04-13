@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Privacy Policy – Greenfield Local Hub{% endblock %}
+{% block title %}Privacy Policy - Greenfield Local Hub{% endblock %}
 
 {% block content %}
 
@@ -15,10 +15,10 @@
         <div class="legal-nav-box">
             <a href="#collect"    class="legal-nav-tab">1. Information We Collect</a>
             <a href="#use"        class="legal-nav-tab">2. How We Use Your Information</a>
-            <a href="#sharing"    class="legal-nav-tab">3. Data Sharing & Disclosure</a>
+            <a href="#sharing"    class="legal-nav-tab">3. Data Sharing &amp; Disclosure</a>
             <a href="#rights"     class="legal-nav-tab">4. Your Privacy Rights</a>
             <a href="#security"   class="legal-nav-tab">5. Data Security</a>
-            <a href="#cookies"    class="legal-nav-tab">6. Cookies & Tracking</a>
+            <a href="#cookies"    class="legal-nav-tab">6. Cookies &amp; Tracking</a>
             <a href="#children"   class="legal-nav-tab">7. Children's Privacy</a>
             <a href="#changes"    class="legal-nav-tab">8. Changes to This Policy</a>
             <a href="#contact-us" class="legal-nav-tab">9. Contact Us</a>
@@ -32,7 +32,7 @@
         </div>
 
         <div class="legal-section" id="collect">
-            <h2>&#10122; 1. Information We Collect</h2>
+            <h2><img src="{{ url_for('static', filename='images/icons/database.svg') }}" alt="database" class="icon-svg"> 1. Information We Collect</h2>
             <h3>Personal Information</h3>
             <ul>
                 <li>Name and contact details (email address, phone number)</li>
@@ -57,7 +57,7 @@
         </div>
 
         <div class="legal-section" id="use">
-            <h2>&#10122; 2. How We Use Your Information</h2>
+            <h2><img src="{{ url_for('static', filename='images/icons/eye.svg') }}" alt="eye" class="icon-svg"> 2. How We Use Your Information</h2>
             <p>We use the information we collect to:</p>
             <ul>
                 <li>Process and fulfil your orders and payments</li>
@@ -72,7 +72,7 @@
         </div>
 
         <div class="legal-section" id="sharing">
-            <h2>&#10122; 3. Data Sharing and Disclosure</h2>
+            <h2><img src="{{ url_for('static', filename='images/icons/file-text.svg') }}" alt="file-text" class="icon-svg"> 3. Data Sharing and Disclosure</h2>
             <h3>With Local Producers</h3>
             <p>We share your name and delivery details with producers to fulfil your orders. This information is used only for order fulfilment and is not stored beyond the necessary period.</p>
             <h3>With Service Providers</h3>
@@ -82,7 +82,7 @@
         </div>
 
         <div class="legal-section" id="rights">
-            <h2>&#10122; 4. Your Privacy Rights</h2>
+            <h2><img src="{{ url_for('static', filename='images/icons/shield.svg') }}" alt="shield" class="icon-svg"> 4. Your Privacy Rights</h2>
             <p>Under UK and EU data protection law, you have the following rights:</p>
             <ul>
                 <li><strong>Right to Access:</strong> You can request a copy of your personal data.</li>
@@ -96,7 +96,7 @@
         </div>
 
         <div class="legal-section" id="security">
-            <h2>&#10122; 5. Data Security</h2>
+            <h2><img src="{{ url_for('static', filename='images/icons/lock.svg') }}" alt="lock" class="icon-svg"> 5. Data Security</h2>
             <p>We take data security seriously and implement appropriate technical and organisational measures:</p>
             <ul>
                 <li>All passwords are hashed using industry-standard algorithms</li>
@@ -110,23 +110,23 @@
         </div>
 
         <div class="legal-section" id="cookies">
-            <h2>&#10122; 6. Cookies and Tracking</h2>
+            <h2>6. Cookies and Tracking</h2>
             <p>We use cookies and similar tracking technologies to enhance your experience on our platform. These include session cookies (essential for site functionality), preference cookies (remembering your settings), and analytics cookies (understanding how the site is used).</p>
             <p>You can control cookies through your browser settings. However, disabling certain cookies may affect the functionality of our site.</p>
         </div>
 
         <div class="legal-section" id="children">
-            <h2>&#10122; 7. Children's Privacy</h2>
+            <h2>7. Children's Privacy</h2>
             <p>Our services are not directed at children under the age of 13. We do not knowingly collect personal information from children. If you believe we have inadvertently collected information from a child, please contact us immediately.</p>
         </div>
 
         <div class="legal-section" id="changes">
-            <h2>&#10122; 8. Changes to This Policy</h2>
+            <h2>8. Changes to This Policy</h2>
             <p>We may update this Privacy Policy from time to time. We will notify you of significant changes by posting the new policy on this page and updating the "Last updated" date. We encourage you to review this policy periodically.</p>
         </div>
 
         <div class="legal-section" id="contact-us">
-            <h2>&#10122; 9. Contact Us</h2>
+            <h2>9. Contact Us</h2>
             <p>If you have any questions about this Privacy Policy or our data practices, please contact us:</p>
             <ul>
                 <li><strong>Email:</strong> privacy@greenfieldlocalhub.co.uk</li>
@@ -140,8 +140,8 @@
     <h2>Questions About Your Privacy?</h2>
     <p>Our team is here to help. Get in touch and we'll respond within 48 hours.</p>
     <div class="legal-cta-btns">
-        <a href="#" class="btn-white">Contact Us</a>
-        <a href="{{ url_for('terms') }}" class="btn-white-out">View Terms & Conditions</a>
+        <a href="{{ url_for('contact') }}" class="btn-white">Contact Us</a>
+        <a href="{{ url_for('terms') }}" class="btn-white-out">View Terms &amp; Conditions</a>
     </div>
 </section>
 

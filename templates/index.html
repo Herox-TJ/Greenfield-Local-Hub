@@ -1,22 +1,91 @@
 {% extends 'base.html' %}
-{% block title %}Greenfield Local Hub – Fresh Local Food{% endblock %}
+{% block title %}Greenfield Local Hub - Fresh, Local, Sustainable{% endblock %}
 
 {% block content %}
+
+<!-- hero -->
 <section class="hero">
-    <h1>Fresh Food from Local Producers</h1>
-    <p>Support your local community. Shop direct from farmers near you.</p>
+    <h1>Fresh, Local, Sustainable</h1>
+    <p>Supporting local farmers and food producers. Browse fresh, locally sourced produce and learn about the people behind your food.</p>
     <div class="hero-btns">
-        <a href="{{ url_for('register') }}" class="btn-hero-primary">Get Started</a>
-        <a href="{{ url_for('login') }}" class="btn-hero-outline">Log In</a>
+        <a href="{{ url_for('products') }}" class="btn-hero-primary">Browse Products</a>
+        <a href="{{ url_for('producers') }}" class="btn-hero-outline">Meet Our Producers</a>
     </div>
 </section>
 
+<!-- why choose -->
 <section class="section">
-    <h2 class="sec-title">Welcome to Greenfield Local Hub</h2>
-    <p class="sec-sub">A marketplace connecting local farmers with the community.</p>
-    <p style="text-align:center;color:#666;max-width:600px;margin:0 auto;">
-        Browse fresh produce, dairy, bakery items and more — all sourced locally.
-        Create an account to start shopping or register as a producer to sell your products.
-    </p>
+    <h2 class="sec-title">Why Choose Greenfield Local Hub?</h2>
+    <div class="features-grid">
+        <div class="feat-card">
+            <div class="feat-icon">
+                <img src="{{ url_for('static', filename='images/icons/leaf.svg') }}" alt="leaf" class="icon-svg">
+            </div>
+            <h3>Locally Sourced</h3>
+            <p>All products come from local farmers and producers within our community, supporting the local economy.</p>
+        </div>
+        <div class="feat-card">
+            <div class="feat-icon"><img src="{{ url_for('static', filename='images/icons/award.svg') }}" alt="award" class="icon-svg"></div>
+            <h3>Quality Assured</h3>
+            <p>Our producers follow sustainable and ethical farming practices, ensuring the highest quality produce.</p>
+        </div>
+        <div class="feat-card">
+            <div class="feat-icon"><img src="{{ url_for('static', filename='images/icons/heart.svg') }}" alt="heart" class="icon-svg"></div>
+            <h3>Community Focused</h3>
+            <p>Join our loyalty scheme and become part of a community that values local, sustainable food.</p>
+        </div>
+    </div>
 </section>
+
+<!-- how it works -->
+<section class="section section-dark">
+    <h2 class="sec-title">How It Works</h2>
+    <p class="sec-sub"></p>
+    <div class="steps-grid">
+        <div class="step">
+            <div class="step-num">1</div>
+            <h3>Create Account</h3>
+            <p>Register as a customer to start shopping for fresh, locally sourced produce.</p>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <h3>Browse Products</h3>
+            <p>Explore our range of fresh, locally sourced food and drinks.</p>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <h3>Place Order</h3>
+            <p>Add items to your cart and place your order at your convenience.</p>
+        </div>
+        <div class="step">
+            <div class="step-num">4</div>
+            <h3>Enjoy Fresh Food</h3>
+            <p>Collect your order or have it delivered direct to your door.</p>
+        </div>
+    </div>
+</section>
+
+<!-- stats -->
+<div class="stats-strip">
+    <div>
+        <div class="stat-big">50+</div>
+        <div class="stat-label">Local Producers</div>
+    </div>
+    <div>
+        <div class="stat-big">200+</div>
+        <div class="stat-label">Fresh Products</div>
+    </div>
+    <div>
+        <div class="stat-big">100%</div>
+        <div class="stat-label">Locally Sourced</div>
+    </div>
+</div>
+
+<!-- CTA -->
+<section class="cta-band">
+    <h2>Ready to Support Local?</h2>
+    <p>Join our community today and start enjoying fresh, sustainable, locally sourced food.</p>
+    <a href="{{ url_for('register') }}" class="btn-cta">Get Started Now</a>
+</section>
+
 {% endblock %}

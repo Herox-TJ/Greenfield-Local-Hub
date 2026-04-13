@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}Browse Products - Greenfield Local Hub{% endblock %}
+
+{% block content %}
+
+<div class="page-hero">
+    <div class="container">
+        <h1>Browse Products</h1>
+        <p>Fresh, locally sourced products from our community of farmers and producers.</p>
+    </div>
+</div>
+
+<!-- search + filter -->
+<div class="filter-bar">
+    <form method="GET" action="{{ url_for('products') }}">
+        <div class="search-wrap">
+            <span class="search-icon"><img src="{{ url_for('static', filename='images/icons/search.svg') }}" alt="search" class="icon-svg"></span>
+            <input type="text" name="search" placeholder="Search products..."
+                   value="{{ search }}">
+        </div>
+        <div class="cat-tabs">
+            {% for cat in categories %}
+            <button type="submit" name="category"
+                    value="{{ cat.lower() }}"
+                    class="cat-tab {% if selected == cat.lower() or (cat == 'All' and selected == 'all') %}active{% endif %}">
+                {{ cat }}
+            </button>
+            {% endfor %}
+        </div>
+    </form>
+</div>
+
+<!-- grid -->
+<div class="products-grid">
+    {% for product in products %}
+    <div class="product-card">
+        <a href="{{ url_for('product_detail', slug=product.slug) }}">
+            {% if product.image %}
+            <img src="{{ product.image }}" alt="{{ product.name }}" class="prod-img" loading="lazy">
+            {% else %}
+            <div class="prod-img-ph"><img src="{{ url_for('static', filename='images/icons/leaf.svg') }}" alt="leaf" class="icon-svg"></div>
+            {% endif %}
+        </a>
+        <div class="prod-body">
+            <div class="prod-cat">{{ product.category }}</div>
+            <div class="prod-name">
+                <a href="{{ url_for('product_detail', slug=product.slug) }}">{{ product.name }}</a>
+            </div>
+            <div class="prod-by"><img src="{{ url_for('static', filename='images/icons/leaf.svg') }}" alt="leaf" class="icon-svg">{{ product.producer.name }}</div>
+            <div class="prod-desc">{{ product.description }}</div>
+            <div class="prod-footer">
+                <div class="prod-price">
+                    {{ '%.2f'|format(product.price) }}
+                    <span>/ {{ product.unit }}</span>
+                </div>
+                <form method="POST" action="{{ url_for('cart_add') }}">
+                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit" class="btn-add-cart" title="Add to cart">+</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <p style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-light);">
+        No products found.
+    </p>
+    {% endfor %}
+</div>
+
+{% endblock %}

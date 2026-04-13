@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block title %}{{ producer.name }} - Greenfield Local Hub{% endblock %}
+
+{% block content %}
+
+<div class="back-bar">
+    <a href="{{ url_for('producers') }}" class="back-link"><img src="{{ url_for('static', filename='images/icons/arrow-left.svg') }}" alt="arrow left" class="icon-svg"> Back</a>
+</div>
+
+<div class="producer-detail">
+    <!-- image -->
+    <div>
+        {% if producer.image %}
+        <img src="{{ producer.image }}" alt="{{ producer.name }}" class="producer-detail-img">
+        {% else %}
+        <div class="producer-detail-img" style="background:linear-gradient(135deg,#1e9b7d,#2bbf9d);"></div>
+        {% endif %}
+    </div>
+
+    <!-- info -->
+    <div>
+        <h1 class="pd-name"><img src="{{ url_for('static', filename='images/icons/leaf.svg') }}" alt="leaf" class="icon-svg"> {{ producer.name }}</h1>
+        <p class="pd-desc">{{ producer.description }}</p>
+        <div class="pd-meta"><img src="{{ url_for('static', filename='images/icons/map-pin.svg') }}" alt="location" class="icon-svg"> {{ producer.location }}</div>
+
+        {% if producer.farming_methods_list %}
+        <div class="pd-section-label">Farming Methods</div>
+        <div class="tag-row">
+            {% for m in producer.farming_methods_list %}
+            <span class="tag">{{ m }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if producer.certifications_list %}
+        <div class="pd-section-label">Certifications</div>
+        <div class="tag-row">
+            {% for c in producer.certifications_list %}
+            <span class="tag">{{ c }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- products from this producer -->
+<div class="pd-products-section">
+    <h2>Products from {{ producer.name }}</h2>
+    <div class="pd-products-grid">
+        {% for product in products %}
+        <div class="product-card">
+            <a href="{{ url_for('product_detail', slug=product.slug) }}">
+                {% if product.image %}
+                <img src="{{ product.image }}" alt="{{ product.name }}" class="prod-img">
+                {% else %}
+                <div class="prod-img-ph"><img src="{{ url_for('static', filename='images/icons/leaf.svg') }}" alt="leaf" class="icon-svg"></div>
+                {% endif %}
+            </a>
+            <div class="prod-body">
+                <div class="prod-cat">{{ product.category }}</div>
+                <div class="prod-name">
+                    <a href="{{ url_for('product_detail', slug=product.slug) }}">{{ product.name }}</a>
+                </div>
+                <div class="prod-by"><img src="{{ url_for('static', filename='images/icons/user.svg') }}" alt="user" class="icon-svg"> {{ producer.name }}</div>
+                <div class="prod-desc">{{ product.description }}</div>
+                <div class="prod-footer">
+                    <div class="prod-price">
+                        {{ '%.2f'|format(product.price) }}
+                        <span>/ {{ product.unit }}</span>
+                    </div>
+                    <form method="POST" action="{{ url_for('cart_add') }}">
+                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                        <input type="hidden" name="quantity" value="1">
+                        <button type="submit" class="btn-add-cart">+</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

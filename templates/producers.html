@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Our Producers - Greenfield Local Hub{% endblock %}
+
+{% block content %}
+
+<div class="page-hero">
+    <div class="container">
+        <h1>Our Producers</h1>
+        <p>Meet the local farmers and producers who make our fresh, sustainable food possible.</p>
+    </div>
+</div>
+
+<div class="producers-grid">
+    {% for producer in producers %}
+    <a href="{{ url_for('producer_detail', slug=producer.slug) }}" class="producer-card">
+        {% if producer.image %}
+        <img src="{{ producer.image }}" alt="{{ producer.name }}" class="prod-card-img" loading="lazy">
+        {% else %}
+        <div class="prod-card-img"></div>
+        {% endif %}
+        <div class="prod-card-body">
+            <div class="prod-card-name"><img src="{{ url_for('static', filename='images/icons/leaf.svg') }}" alt="leaf" class="icon-svg"> {{ producer.name }}</div>
+            <p class="prod-card-desc">{{ producer.description }}</p>
+            <div class="prod-card-loc"><img src="{{ url_for('static', filename='images/icons/map-pin.svg') }}" alt="location" class="icon-svg"> {{ producer.location }}</div>
+            <div class="prod-card-tags">
+                {% for method in producer.farming_methods_list[:2] %}
+                <span class="tag">{{ method }}</span>
+                {% endfor %}
+                {% if producer.farming_methods_list|length > 2 %}
+                <span class="tag">+{{ producer.farming_methods_list|length - 2 }} more</span>
+                {% endif %}
+            </div>
+        </div>
+    </a>
+    {% else %}
+    <p style="grid-column:1/-1; text-align:center; padding:3rem; color:var(--text-light);">
+        No producers found.
+    </p>
+    {% endfor %}
+</div>
+
+{% endblock %}

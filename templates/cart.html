@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}Shopping Cart - Greenfield Local Hub{% endblock %}
+
+{% block content %}
+<div class="cart-page">
+    <h1>Shopping Cart</h1>
+
+    {% if cart_items %}
+    <div class="cart-list">
+        {% for item in cart_items %}
+        <div class="cart-item">
+            <!-- image -->
+            {% if item.product.image %}
+            <img src="{{ item.product.image }}" alt="{{ item.product.name }}" class="cart-item-img">
+            {% else %}
+            <div class="cart-item-img-ph">
+                <img src="{{ url_for('static', filename='images/icons/leaf.svg') }}" alt="leaf" class="icon-svg">
+            </div>
+            {% endif %}
+
+            <!-- details -->
+            <div>
+                <div class="cart-item-name">{{ item.product.name }}</div>
+                <div class="cart-item-price">
+                    {{ '%.2f'|format(item.product.price) }} / {{ item.product.unit }}
+                </div>
+                <div class="cart-qty-row">
+                    <form method="POST" action="{{ url_for('cart_update') }}"
+                          style="display:inline-flex; align-items:center; gap:.4rem;">
+                        <input type="hidden" name="item_id" value="{{ item.id }}">
+                        <input type="number" name="quantity" value="{{ item.quantity }}"
+                               min="0" max="{{ item.product.stock }}"
+                               class="cart-qty-input">
+                        <button type="submit"
+                                style="background:var(--bg);border:1px solid var(--border);
+                                       padding:.3rem .7rem;border-radius:6px;cursor:pointer;
+                                       font-size:.8rem;">
+                            Update
+                        </button>
+                    </form>
+                    <form method="POST" action="{{ url_for('cart_remove', item_id=item.id) }}">
+                        <button type="submit" class="btn-remove">&#128465; Remove</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- subtotal -->
+            <div class="cart-item-sub">
+                {{ '%.2f'|format(item.subtotal) }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="cart-summary">
+        <div class="cart-total-row">
+            Total: <span>{{ '%.2f'|format(total) }}</span>
+        </div>
+        <button class="btn-checkout">Proceed to Checkout</button>
+    </div>
+
+    {% else %}
+    <div class="cart-empty">
+        <div class="cart-empty-icon"><img src="{{ url_for('static', filename='images/icons/shopping-cart.svg') }}" alt="cart" class="icon-svg"></div>
+        <h2>Your Cart is Empty</h2>
+        <p>Start adding some fresh local produce to your cart!</p>
+        <a href="{{ url_for('products') }}" class="btn-teal">Browse Products</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
