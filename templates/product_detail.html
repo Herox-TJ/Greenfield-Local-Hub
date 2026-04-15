@@ -24,7 +24,7 @@
         <p class="detail-desc">{{ product.description }}</p>
 
         <div class="price-big">
-            {{ '%.2f'|format(product.price) }}
+            £{{ '%.2f'|format(product.price) }}
             <small>/ {{ product.unit }}</small>
         </div>
 
@@ -38,7 +38,7 @@
             <input type="hidden" name="product_id" value="{{ product.id }}">
             <div class="qty-row">
                 <div class="qty-ctrl">
-                    <button type="button" class="qty-btn" data-action="dec"></button>
+                    <button type="button" class="qty-btn" data-action="dec">-</button>
                     <input type="number" name="quantity" value="1" min="1"
                            max="{{ product.stock }}" class="qty-input">
                     <button type="button" class="qty-btn" data-action="inc">+</button>

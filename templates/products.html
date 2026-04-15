@@ -50,7 +50,7 @@
             <div class="prod-desc">{{ product.description }}</div>
             <div class="prod-footer">
                 <div class="prod-price">
-                    {{ '%.2f'|format(product.price) }}
+                    £{{ '%.2f'|format(product.price) }}
                     <span>/ {{ product.unit }}</span>
                 </div>
                 <form method="POST" action="{{ url_for('cart_add') }}">

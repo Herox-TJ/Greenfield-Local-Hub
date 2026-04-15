@@ -52,6 +52,12 @@ class Producer(db.Model):
         if self.farming_methods:
             return [m.strip() for m in self.farming_methods.split(',') if m.strip()]
         return []
+    
+    @property
+    def certifications_list(self):
+        if self.certificatons:
+            return [c.strip() for c in self.certifications.split(',') if c.strip()]
+        return []
 
     @property
     def product_count(self):
@@ -69,7 +75,7 @@ class Product(db.Model):
     unit        = db.Column(db.String(50))
     stock       = db.Column(db.Integer, default=0)
     category    = db.Column(db.String(100))
-    image       = db.Column(db.String(400))
+    image       = db.Column(db.String(400), nullable=False)
 
     cart_items = db.relationship('CartItem', backref='product', lazy=True)
 

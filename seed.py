@@ -1,7 +1,6 @@
 """Run once to populate the database with sample data.
    Usage: python seed.py
    Credentials:
-     Admin:    admin@greenfield.com  / Admin123!
      Customer: customer@greenfield.com / Customer1!
      Producer: josh@greenvalley.com   / Producer1!
 """
@@ -139,7 +138,6 @@ def seed():
         db.session.commit()
 
         print('Seed data created successfully.')
-        print('  admin@greenfield.com    / Admin123!')
         print('  customer@greenfield.com / Customer1!')
         print('  josh@greenvalley.com    / Producer1!')
 

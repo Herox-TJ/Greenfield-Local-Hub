@@ -46,7 +46,6 @@ def inject_globals():
 #public pages
 @app.route('/')
 def index():
-
     featured = Product.query.limit(6).all()
     return render_template('index.html', featured=featured)
 
