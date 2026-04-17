@@ -28,5 +28,4 @@ document.addEventListener('DOMContentLoaded', function () {
             setTimeout(function () { el.remove(); }, 500);
         });
     }, 4000);
-
 });

@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Browse Products - Greenfield Local Hub{% endblock %}
+{% block title %}Browse Products – Greenfield Local Hub{% endblock %}
 
 {% block content %}
 
@@ -46,7 +46,7 @@
             <div class="prod-name">
                 <a href="{{ url_for('product_detail', slug=product.slug) }}">{{ product.name }}</a>
             </div>
-            <div class="prod-by"><img src="{{ url_for('static', filename='images/icons/leaf.svg') }}" alt="leaf" class="icon-svg">{{ product.producer.name }}</div>
+            <div class="prod-by">@ {{ product.producer.name }}</div>
             <div class="prod-desc">{{ product.description }}</div>
             <div class="prod-footer">
                 <div class="prod-price">
@@ -68,4 +68,4 @@
     {% endfor %}
 </div>
 
-{% endblock %}
+{% endblock %} 

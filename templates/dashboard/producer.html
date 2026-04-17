@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block title %}Producer Dashboard - Greenfield Local Hub{% endblock %}
+
+{% block content %}
+<div class="dash-page">
+    <div class="dash-header">
+        <h1>Producer Dashboard</h1>
+        <p>Manage your products and track sales</p>
+    </div>
+
+    <!-- stat cards -->
+    <div class="dash-stat-grid">
+        <div class="stat-card">
+            <div class="stat-card-hd"><img src="{{ url_for('static', filename='images/icons/dollar-sign.svg') }}" alt="revenue" class="icon-svg"> Total Revenue</div>
+            <div class="stat-card-val green">£{{ '%.2f'|format(total_revenue) }}</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-hd"><img src="{{ url_for('static', filename='images/icons/package.svg') }}" alt="package" class="icon-svg"> Products Listed</div>
+            <div class="stat-card-val">{{ products|length }}</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-hd"><img src="{{ url_for('static', filename='images/icons/trending-up.svg') }}" alt="trending" class="icon-svg"> Total Stock</div>
+            <div class="stat-card-val">{{ total_stock }}</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-hd"><img src="{{ url_for('static', filename='images/icons/shopping-cart.svg') }}" alt="cart" class="icon-svg"> Orders</div>
+            <div class="stat-card-val">{{ orders|length }}</div>
+        </div>
+    </div>
+
+    <!-- products + orders -->
+    <div class="dash-two-col">
+        <!-- my products -->
+        <div class="dash-card" style="grid-column:1/2;">
+            <div class="dash-card-title">My Products</div>
+            {% if products %}
+            {% for p in products %}
+            <div class="prod-list-row">
+                {% if p.image %}
+                <img src="{{ p.image }}" alt="{{ p.name }}" class="prod-list-img">
+                {% else %}
+                <div class="prod-list-img-ph"><img src="{{ url_for('static', filename='images/icons/leaf.svg') }}" alt="leaf" class="icon-svg"></div>
+                {% endif %}
+                <div style="flex:1;">
+                    <div class="prod-list-name">{{ p.name }}</div>
+                    <div class="prod-list-meta">
+                        Stock: {{ p.stock }} &nbsp;·&nbsp;
+                        £{{ '%.2f'|format(p.price) }}/{{ p.unit }}
+                    </div>
+                </div>
+                {% if p.in_stock %}
+                <span class="badge-in">In Stock</span>
+                {% else %}
+                <span class="badge-out">Out of Stock</span>
+                {% endif %}
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon"><img src="{{ url_for('static', filename='images/icons/package.svg') }}" alt="package" class="icon-svg"></div>
+                <p>No products listed yet</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- recent orders -->
+        <div class="dash-card">
+            <div class="dash-card-title">Recent Orders</div>
+            {% if orders %}
+            {% for order in orders %}
+            <div class="prod-list-row">
+                <div style="flex:1;">
+                    <div style="font-weight:600;font-size:.88rem;">Order #{{ order.id }}</div>
+                    <div style="font-size:.78rem;color:var(--text-light);">
+                        {{ order.created_at.strftime('%d %b %Y') }}
+                        &nbsp;·&nbsp; {{ order.status|capitalize }}
+                    </div>
+                </div>
+                <div style="font-weight:700;">£{{ '%.2f'|format(order.total) }}</div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon"><img src="{{ url_for('static', filename='images/icons/shopping-cart.svg') }}" alt="cart" class="icon-svg"></div>
+                <p>No orders yet</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

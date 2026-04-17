@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard – Greenfield Local Hub{% endblock %}
+
+{% block content %}
+<div class="dash-page">
+    <div class="dash-header">
+        <h1>Admin Dashboard</h1>
+        <p>Platform overview and management</p>
+    </div>
+
+    <!-- stat cards -->
+    <div class="dash-stat-grid">
+        <div class="stat-card">
+            <div class="stat-card-hd"><img src="{{ url_for('static', filename='images/icons/dollar-sign.svg') }}" alt="revenue" class="icon-svg"> Revenue</div>
+            <div class="stat-card-val green">£{{ '%.2f'|format(total_revenue) }}</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-hd"><img src="{{ url_for('static', filename='images/icons/shopping-cart.svg') }}" alt="cart" class="icon-svg"> Orders</div>
+            <div class="stat-card-val">{{ orders|length }}</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-hd"><img src="{{ url_for('static', filename='images/icons/user.svg') }}" alt="user" class="icon-svg"> Users</div>
+            <div class="stat-card-val">{{ users|length }}</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-hd"><img src="{{ url_for('static', filename='images/icons/package.svg') }}" alt="package" class="icon-svg"> Products</div>
+            <div class="stat-card-val">{{ products|length }}</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-hd"><img src="{{ url_for('static', filename='images/icons/trending-up.svg') }}" alt="trending" class="icon-svg"> Producers</div>
+            <div class="stat-card-val">{{ producers|length }}</div>
+        </div>
+    </div>
+
+    <!-- orders + categories -->
+    <div class="dash-two-col" style="margin-bottom:1.5rem;">
+        <!-- recent orders -->
+        <div class="dash-card">
+            <div class="dash-card-title">Recent Orders</div>
+            {% if orders %}
+            {% for order in orders[:6] %}
+            <div class="prod-list-row">
+                <div style="flex:1;">
+                    <div style="font-weight:600;font-size:.88rem;">Order #{{ order.id }}</div>
+                    <div style="font-size:.78rem;color:var(--text-light);">
+                        {{ order.created_at.strftime('%d %b %Y') }}
+                        &nbsp;·&nbsp; {{ order.status|capitalize }}
+                    </div>
+                </div>
+                <div style="font-weight:700;">£{{ '%.2f'|format(order.total) }}</div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon"><img src="{{ url_for('static', filename='images/icons/shopping-cart.svg') }}" alt="cart" class="icon-svg"></div>
+                <p>No orders yet</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- products by category -->
+        <div class="dash-card">
+            <div class="dash-card-title">Products by Category</div>
+            {% for cat, count in categories|dictsort(false, 'value')|reverse %}
+            <div class="bar-row">
+                <span class="bar-lbl">{{ cat }}</span>
+                <div class="bar-track">
+                    <div class="bar-fill" style="--pct:{{ (count / max_category_count * 100)|int }}"></div>
+                </div>
+                <span class="bar-cnt">{{ count }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- producers overview -->
+    <div class="dash-card">
+        <div class="dash-card-title">Producers Overview</div>
+        <div class="admin-producers-grid">
+            {% for producer in producers %}
+            <div class="admin-prod-card">
+                <h4>{{ producer.name }}</h4>
+                <p>{{ producer.location }}</p>
+                <div class="admin-prod-cnt">
+                    Products: <strong>{{ producer.product_count }}</strong>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

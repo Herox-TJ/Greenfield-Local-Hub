@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<!-- navbar -->
+<!--navbar-->
 <nav class="navbar">
     <a href="{{ url_for('index') }}" class="nav-logo">
         <div class="logo-icon"><img src="{{ url_for('static', filename='images/icons/leaf.svg') }}" alt="leaf" class="icon-svg"></div>
@@ -24,6 +24,9 @@
         <a href="{{ url_for('producers') }}">Producers</a>
         <a href="{{ url_for('about') }}">About Us</a>
         <a href="{{ url_for('contact') }}">Contact Us</a>
+        {% if current_user %}
+        <a href="{{ url_for('dashboard_' ~ current_user.role) }}">Dashboard</a>
+        {% endif %}
     </div>
 
     <div class="nav-right">
@@ -46,7 +49,7 @@
     </div>
 </nav>
 
-<!-- flash messages -->
+<!--flash messages-->
 {% with messages = get_flashed_messages(with_categories=true) %}
 {% if messages %}
 <div class="flash-container">
@@ -57,10 +60,10 @@
 {% endif %}
 {% endwith %}
 
-<!-- page content -->
+<!--page content-->
 {% block content %}{% endblock %}
 
-<!-- footer -->
+<!--footer-->
 <footer class="footer">
     <div class="footer-inner">
         <div class="footer-brand">
@@ -97,7 +100,7 @@
                 <a href="#" class="soc-icon">in</a>
             </div>
             <a href="{{ url_for('privacy') }}">Privacy Policy</a>
-            <a href="{{ url_for('terms') }}">Terms &amp; Conditions</a>
+            <a href="{{ url_for('terms') }}">Terms & Conditions</a>
         </div>
     </div>
     <div class="footer-bottom">
@@ -112,4 +115,4 @@
   use-important="false"
 ></script>
 </body>
-</html>
+</html> 

@@ -61,7 +61,7 @@
                 <div class="prod-name">
                     <a href="{{ url_for('product_detail', slug=product.slug) }}">{{ product.name }}</a>
                 </div>
-                <div class="prod-by"><img src="{{ url_for('static', filename='images/icons/user.svg') }}" alt="user" class="icon-svg"> {{ producer.name }}</div>
+                <div class="prod-by">@ {{ producer.name }}</div>
                 <div class="prod-desc">{{ product.description }}</div>
                 <div class="prod-footer">
                     <div class="prod-price">
@@ -80,4 +80,4 @@
     </div>
 </div>
 
-{% endblock %}
+{% endblock %} 

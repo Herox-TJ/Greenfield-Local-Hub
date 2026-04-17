@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Shopping Cart - Greenfield Local Hub{% endblock %}
+{% block title %}Shopping Cart – Greenfield Local Hub{% endblock %}
 
 {% block content %}
 <div class="cart-page">
@@ -11,22 +11,21 @@
         <div class="cart-item">
             <!-- image -->
             {% if item.product.image %}
-            <img src="{{ item.product.image }}" alt="{{ item.product.name }}" class="cart-item-img">
+            <img src="{{ item.product.image }}" alt="{{ item.product.name }}"
+                 class="cart-item-img">
             {% else %}
-            <div class="cart-item-img-ph">
-                <img src="{{ url_for('static', filename='images/icons/leaf.svg') }}" alt="leaf" class="icon-svg">
-            </div>
+            <div class="cart-item-img-ph"><img src="{{ url_for('static', filename='images/icons/leaf.svg') }}" alt="leaf" class="icon-svg"></div>
             {% endif %}
 
             <!-- details -->
             <div>
                 <div class="cart-item-name">{{ item.product.name }}</div>
                 <div class="cart-item-price">
-                    {{ '%.2f'|format(item.product.price) }} / {{ item.product.unit }}
+                    £{{ '%.2f'|format(item.product.price) }} / {{ item.product.unit }}
                 </div>
                 <div class="cart-qty-row">
                     <form method="POST" action="{{ url_for('cart_update') }}"
-                          style="display:inline-flex; align-items:center; gap:.4rem;">
+                          style="display:inline-flex;align-items:center;gap:.4rem;">
                         <input type="hidden" name="item_id" value="{{ item.id }}">
                         <input type="number" name="quantity" value="{{ item.quantity }}"
                                min="0" max="{{ item.product.stock }}"
@@ -39,14 +38,14 @@
                         </button>
                     </form>
                     <form method="POST" action="{{ url_for('cart_remove', item_id=item.id) }}">
-                        <button type="submit" class="btn-remove">&#128465; Remove</button>
+                        <button type="submit" class="btn-remove">Remove</button>
                     </form>
                 </div>
             </div>
 
             <!-- subtotal -->
             <div class="cart-item-sub">
-                {{ '%.2f'|format(item.subtotal) }}
+                £{{ '%.2f'|format(item.subtotal) }}
             </div>
         </div>
         {% endfor %}
@@ -54,7 +53,7 @@
 
     <div class="cart-summary">
         <div class="cart-total-row">
-            Total: <span>{{ '%.2f'|format(total) }}</span>
+            Total: <span>£{{ '%.2f'|format(total) }}</span>
         </div>
         <button class="btn-checkout">Proceed to Checkout</button>
     </div>
@@ -68,4 +67,4 @@
     </div>
     {% endif %}
 </div>
-{% endblock %}
+{% endblock %} 

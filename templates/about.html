@@ -3,4 +3,88 @@
 
 {% block content %}
 
-{% endblock %}
+<section class="about-hero">
+    <h1>About Greenfield Local Hub</h1>
+    <p>Connecting our community with fresh, sustainable, locally sourced food.</p>
+</section>
+
+<!-- our story -->
+<section class="story-section">
+    <h2>Our Story</h2>
+    <p>Greenfield Local Hub was founded with a simple mission: to reconnect people with the food they eat and the farmers who grow it. We believe that fresh, locally sourced produce shouldn't be a luxury — it should be accessible to everyone in our community.</p>
+    <p>What started as a small farmers' market has grown into a thriving online platform that brings together local producers and conscious consumers. Today, we're proud to support over 50 local farmers, artisan food producers, and sustainable businesses across our region.</p>
+    <p>Every purchase you make through Greenfield Local Hub helps support local families, reduces food miles, and builds a more sustainable food system for future generations.</p>
+</section>
+
+<!-- our values -->
+<section class="section section-dark" style="padding-top:1rem;">
+    <h2 class="sec-title">Our Values</h2>
+    <p class="sec-sub"></p>
+    <div class="values-grid">
+        <div class="val-card">
+            <div class="val-icon"><img src="{{ url_for('static', filename='images/icons/target.svg') }}" alt="target" class="icon-svg"></div>
+            <h3>Sustainability</h3>
+            <p>We're committed to environmentally responsible practices that protect our planet for future generations.</p>
+        </div>
+        <div class="val-card">
+            <div class="val-icon"><img src="{{ url_for('static', filename='images/icons/heart.svg') }}" alt="heart" class="icon-svg"></div>
+            <h3>Community</h3>
+            <p>Building strong relationships between producers and consumers strengthens our entire community.</p>
+        </div>
+        <div class="val-card">
+            <div class="val-icon"><img src="{{ url_for('static', filename='images/icons/award.svg') }}" alt="award" class="icon-svg"></div>
+            <h3>Quality</h3>
+            <p>We partner only with producers who share our commitment to the highest quality standards.</p>
+        </div>
+        <div class="val-card">
+            <div class="val-icon"><img src="{{ url_for('static', filename='images/icons/scale.svg') }}" alt="scale" class="icon-svg"></div>
+            <h3>Fairness</h3>
+            <p>Fair prices for producers and customers, creating value for everyone in our network.</p>
+        </div>
+        <div class="val-card">
+            <div class="val-icon"><img src="{{ url_for('static', filename='images/icons/eye.svg') }}" alt="eye" class="icon-svg"></div>
+            <h3>Transparency</h3>
+            <p>Know exactly where your food comes from and who produced it.</p>
+        </div>
+        <div class="val-card">
+            <div class="val-icon"><img src="{{ url_for('static', filename='images/icons/trending-up.svg') }}" alt="trending" class="icon-svg"></div>
+            <h3>Growth</h3>
+            <p>Supporting local economies and helping small businesses thrive.</p>
+        </div>
+    </div>
+</section>
+
+<!-- our impact -->
+<section class="impact-strip">
+    <h2 class="sec-title">Our Impact</h2>
+    <p class="sec-sub" style="margin-bottom:2rem;"></p>
+    <div class="impact-grid">
+        <div>
+            <div class="impact-num">50+</div>
+            <div class="impact-title">Local Producers Supported</div>
+            <div class="impact-desc">Helping local farmers and artisans reach more customers.</div>
+        </div>
+        <div>
+            <div class="impact-num">10,000+</div>
+            <div class="impact-title">Orders Fulfilled</div>
+            <div class="impact-desc">Delivering fresh local food to our community.</div>
+        </div>
+        <div>
+            <div class="impact-num">75%</div>
+            <div class="impact-title">Carbon Reduction</div>
+            <div class="impact-desc">Compared to traditional supply chains.</div>
+        </div>
+    </div>
+</section>
+
+<!-- join CTA -->
+<section class="join-band">
+    <h2>Join Our Community</h2>
+    <p>Whether you're a customer looking for fresh local food or a producer wanting to reach more people, we'd love to have you join the Greenfield Local Hub family.</p>
+    <div class="join-btns">
+        <a href="{{ url_for('register') }}" class="btn-white">Get Started</a>
+        <a href="{{ url_for('producers') }}" class="btn-white-out">Meet Our Producers</a>
+    </div>
+</section>
+
+{% endblock %} 

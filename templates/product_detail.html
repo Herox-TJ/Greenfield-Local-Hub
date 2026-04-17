@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}{{ product.name }} - Greenfield Local Hub{% endblock %}
+{% block title %}{{ product.name }} – Greenfield Local Hub{% endblock %}
 
 {% block content %}
 
@@ -29,9 +29,9 @@
         </div>
 
         {% if product.in_stock %}
-        <div class="stock-tag"> In Stock ({{ product.stock }} available)</div>
+        <div class="stock-tag">✓ In Stock ({{ product.stock }} available)</div>
         {% else %}
-        <div class="stock-tag stock-out"> Out of Stock</div>
+        <div class="stock-tag stock-out">✗ Out of Stock</div>
         {% endif %}
 
         <form method="POST" action="{{ url_for('cart_add') }}">
@@ -69,4 +69,4 @@
     </div>
 </div>
 
-{% endblock %}
+{% endblock %} 
