@@ -3,7 +3,7 @@ const themeToggle = document.getElementById('theme-toggle');
 const savedTheme = localStorage.getItem('theme') || 'light';
 document.documentElement.setAttribute('data-theme', savedTheme);
 if (themeToggle) {
-    themeToggle.textContent = savedTheme === 'dark' ? '☀' : '☾';
+    themeToggle.textContent = savedTheme === 'dark' ? '☀︎' : '☾';
     themeToggle.addEventListener('click', function() {
         const current = document.documentElement.getAttribute('data-theme');
         const next = current === 'dark' ? 'light' : 'dark';
