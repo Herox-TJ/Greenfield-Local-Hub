@@ -30,6 +30,7 @@
     </div>
 
     <div class="nav-right">
+        <button id="theme-toggle" class="theme-btn" title="Toggle dark mode"><img src="{{ url_for('static', filename='images/icons/moon.svg') }}" alt="Toggle" class="icon-svg"></button>
         <a href="{{ url_for('cart') }}" class="nav-cart">
             <img src="{{ url_for('static', filename='images/icons/shopping-cart.svg') }}" alt="cart" class="icon-svg">
             {% if cart_count > 0 %}
@@ -41,7 +42,7 @@
             <div class="nav-user-icon">{{ current_user.initials }}</div>
             <span>{{ current_user.first_name }} {{ current_user.last_name[0] }}.</span>
         </div>
-        <a href="{{ url_for('logout') }}" class="nav-logout" title="Logout"><img src="{{ url_for('static', filename='images/icons/log-in.svg') }}" alt="login" class="icon-svg"></a>
+        <a href="{{ url_for('logout') }}" class="nav-logout" title="Logout"><img src="{{ url_for('static', filename='images/icons/log-out.svg') }}" alt="log-out" class="icon-svg"></a>
         {% else %}
         <a href="{{ url_for('login') }}" class="btn-nav-login">Login</a>
         <a href="{{ url_for('register') }}" class="btn-nav-register">Register</a>
@@ -70,8 +71,8 @@
             <div class="brand-logo">
                 <div class="logo-icon"><img src="{{ url_for('static', filename='images/icons/leaf.svg') }}" alt="leaf" class="icon-svg"></div>
                 <div>
-                    <span style="font-size:.95rem;font-weight:800;">Greenfield</span>
-                    <span style="font-size:.65rem;font-weight:400;opacity:.8;display:block;">Local Hub</span>
+                    <span style="font-size:.95rem; font-weight:800;">Greenfield</span>
+                    <span style="font-size:.65rem; font-weight:400; opacity:.8; display:block;">Local Hub</span>
                 </div>
             </div>
             <p>Supporting local farmers and sustainable agriculture. Fresh, locally sourced food for our community.</p>
@@ -109,10 +110,69 @@
 </footer>
 
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-<script
-  src="https://static.getwcag.com/widget.js"
-  config-url="https://static.getwcag.com/configs/vRyriYSxWjATrlPonQco/config.json"
-  use-important="false"
-></script>
+
+<!--cookie banner-->
+<div id="cookie-overlay" class="cookie-overlay" style="display:none;" aria-modal="true" role="dialog">
+    <div class="cookie-modal">
+        <div class="cookie-modal-head">
+            <h2>Cookies Settings</h2>
+            <button id="cookie-close" class="cookie-close-btn" aria-label="Close">&times;</button>
+        </div>
+        <p class="cookie-modal-body">
+            We use cookies and similar technologies to help personalise content, tailor and measure ads,
+            and provide a better experience. By clicking accept, you agree to this, as outlined in our
+            <a href="{{ url_for('privacy') }}">Cookie Policy</a>.
+        </p>
+        <div class="cookie-modal-actions">
+            <button id="cookie-accept" class="cookie-btn-accept">Accept</button>
+            <button id="cookie-prefs"  class="cookie-btn-prefs">Preferences</button>
+        </div>
+    </div>
+</div>
+
+<!-- preferences panel (shown when "Preferences" is clicked) -->
+<div id="cookie-prefs-panel" class="cookie-prefs-panel" style="display:none;">
+    <div class="cookie-modal">
+        <div class="cookie-modal-head">
+            <h2>Cookie Preferences</h2>
+            <button id="cookie-prefs-close" class="cookie-close-btn" aria-label="Close">X</button>
+        </div>
+        <div class="cookie-pref-list">
+            <div class="cookie-pref-row">
+                <div>
+                    <strong>Essential Cookies</strong>
+                    <p>Required for the site to work. Cannot be disabled.</p>
+                </div>
+                <label class="cookie-toggle">
+                    <input type="checkbox" checked disabled>
+                    <span class="cookie-toggle-track"></span>
+                </label>
+            </div>
+            <div class="cookie-pref-row">
+                <div>
+                    <strong>Analytics Cookies</strong>
+                    <p>Help us understand how visitors interact with the site.</p>
+                </div>
+                <label class="cookie-toggle">
+                    <input type="checkbox" id="pref-analytics" checked>
+                    <span class="cookie-toggle-track"></span>
+                </label>
+            </div>
+            <div class="cookie-pref-row">
+                <div>
+                    <strong>Marketing Cookies</strong>
+                    <p>Used to personalise ads and measure their effectiveness.</p>
+                </div>
+                <label class="cookie-toggle">
+                    <input type="checkbox" id="pref-marketing">
+                    <span class="cookie-toggle-track"></span>
+                </label>
+            </div>
+        </div>
+        <div class="cookie-modal-actions">
+            <button id="cookie-save-prefs" class="cookie-btn-accept">Save Preferences</button>
+        </div>
+    </div>
+</div>
 </body>
 </html> 

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Order Placed Successfully - Greenfield Local Hub{% endblock %}
+
+{% block content %}
+<div class="success-page">
+    <div class="success-card">
+        <div class="success-icon"><img src="{{ url_for('static', filename='images/icons/check.svg') }}" alt="success" class="icon-svg"></div>
+
+        <h1>Order Placed Successfully!</h1>
+
+        <p>Thank you for supporting local producers. You'll receive a confirmation email shortly.</p>
+
+        {% if order_id %}
+        <p style="font-size:0.83rem;color:var(--text-light);margin-bottom:1.5rem;">
+            Order reference: <strong>#{{ order_id }}</strong>
+        </p>
+        {% endif %}
+
+        <div class="success-btns">
+            <a href="{{ url_for('dashboard_customer') }}" class="btn-success-primary">
+                View My Orders
+            </a>
+            <a href="{{ url_for('products') }}" class="btn-success-secondary">
+                Continue Shopping
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -123,9 +123,9 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email', '').strip().lower()
         password = request.form.get('password', '')
+        selected_role = request.form.get('role', 'customer')
         user = User.query.filter_by(email=email).first()
 
-        selected_role = request.form.get('role', 'customer')
         if user and user.check_password(password):
             if user.role != selected_role:
                 flash(f'This account is not registered as a {selected_role}.', 'error')
@@ -381,6 +381,85 @@ def cart_update():
             db.session.delete(item)
             db.session.commit()
     return redirect(url_for('cart'))
+
+
+#checkout
+@app.route('/checkout', methods=['GET', 'POST'])
+@login_required
+def checkout():
+    user = get_current_user()
+    items = CartItem.query.filter_by(user_id=user.id).all()
+    if not items:
+        flash('Your cart is empty.', 'error')
+        return redirect(url_for('cart'))
+
+    subtotal = sum(i.subtotal for i in items)
+    loyalty_pts = max(1, int(subtotal))  # 1 point per £1
+
+    if request.method == 'POST':
+        fulfillment = request.form.get('fulfillment', 'delivery')
+        address = request.form.get('address', '').strip()
+
+        if fulfillment == 'delivery' and not address:
+            flash('Please enter a delivery address.', 'error')
+            return render_template('checkout.html', items=items, subtotal=subtotal, loyalty_pts=loyalty_pts)
+
+        # create order
+        order = Order(
+            user_id=user.id,
+            total=subtotal,
+            status='confirmed',
+            fulfillment_method=fulfillment,
+            delivery_address=address
+        )
+        db.session.add(order)
+        db.session.flush()
+
+        for item in items:
+            oi = OrderItem(
+                order_id=order.id,
+                product_id=item.product_id,
+                quantity=item.quantity,
+                price=item.product.price
+            )
+            db.session.add(oi)
+            # decrement stock
+            if item.product.stock >= item.quantity:
+                item.product.stock -= item.quantity
+
+        # create payment record
+        from model import Payment
+        import uuid as _uuid
+        payment = Payment(
+            order_id=order.id,
+            user_id=user.id,
+            amount=subtotal,
+            method='mock_gateway',
+            status='completed',
+            transaction_ref=_uuid.uuid4().hex
+        )
+        db.session.add(payment)
+
+        # update loyalty points
+        user.loyalty_points = (user.loyalty_points or 0) + loyalty_pts
+
+        # clear cart
+        for item in items:
+            db.session.delete(item)
+
+        db.session.commit()
+        session['last_order_id'] = order.id
+        flash('Order placed successfully!', 'success')
+        return redirect(url_for('order_success'))
+
+    return render_template('checkout.html', items=items, subtotal=subtotal, loyalty_pts=loyalty_pts)
+
+
+@app.route('/order-success')
+@login_required
+def order_success():
+    order_id = session.get('last_order_id')
+    return render_template('order_success.html', order_id=order_id)
 
 
 #dashboards

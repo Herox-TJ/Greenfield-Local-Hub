@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block title %}Checkout - Greenfield Local Hub{% endblock %}
+
+{% block content %}
+<div class="checkout-page">
+    <h1>Checkout</h1>
+
+    <form method="POST" action="{{ url_for('checkout') }}">
+
+        <!-- Fulfillment Method -->
+        <div class="checkout-section">
+            <h2><img src="{{ url_for('static', filename='images/icons/package.svg') }}" alt="package" class="icon-svg"> Fulfilment Method</h2>
+            <div class="fulfilment-options">
+                <label class="fulfilment-card selected" id="card-delivery">
+                    <input type="radio" name="fulfilment" value="delivery" checked>
+                    <span class="fulfilment-label">Home Delivery</span>
+                    <span class="fulfilment-sub">Free delivery on all orders</span>
+                </label>
+                <label class="fulfilment-card" id="card-collection">
+                    <input type="radio" name="fulfilment" value="collection">
+                    <span class="fulfilment-label">Collection</span>
+                    <span class="fulfilment-sub">Pick up from our hub</span>
+                    <span class="fulfilment-badge">GLH</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Delivery Address -->
+        <div class="checkout-section checkout-address">
+            <h2><img src="{{ url_for('static', filename='images/icons/map-pin.svg') }}" alt="location" class="icon-svg"> Delivery Address</h2>
+            <textarea name="address" placeholder="Enter your full delivery address..." required></textarea>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="checkout-section">
+            <h2><img src="{{ url_for('static', filename='images/icons/shopping-cart.svg') }}" alt="cart" class="icon-svg"> Order Summary</h2>
+            {% for item in items %}
+            <div class="checkout-order-item">
+                <span>{{ item.product.name }} x {{ item.quantity }}</span>
+                <span>£{{ '%.2f'|format(item.subtotal) }}</span>
+            </div>
+            {% endfor %}
+            <hr class="summary-divider" style="margin: 0.75rem 0;">
+            <div class="checkout-order-item">
+                <span>Subtotal</span>
+                <span>£{{ '%.2f'|format(subtotal) }}</span>
+            </div>
+            <div class="checkout-order-item">
+                <span>Delivery</span>
+                <span style="color:var(--teal); font-weight:600;">Free</span>
+            </div>
+            <hr class="summary-divider" style="margin: 0.75rem 0;">
+            <div class="checkout-order-item" style="font-weight:800; font-size:1rem;">
+                <span>Total</span>
+                <span style="color:var(--teal);">£{{ '%.2f'|format(subtotal) }}</span>
+            </div>
+            <div class="loyalty-earned" style="margin-top:0.5rem;">
+                <img src="{{ url_for('static', filename='images/icons/award.svg') }}" alt="award" class="icon-svg"> Loyalty Points Earned: +{{ loyalty_pts }} points
+            </div>
+        </div>
+
+        <!-- Payment -->
+        <div class="checkout-section">
+            <h2><img src="{{ url_for('static', filename='images/icons/lock.svg') }}" alt="lock" class="icon-svg"> Payment</h2>
+            <p class="payment-info">
+                <img src="{{ url_for('static', filename='images/icons/lock.svg') }}" alt="lock" class="icon-svg"> Payment will be processed securely. This is a demo & no actual payment will be charged.
+            </p>
+            <div class="mock-payment-box">
+                <p>Mock Payment Gateway</p>
+                <p>Click here to Place Order and complete your order</p>
+            </div>
+        </div>
+
+        <!-- Place Order button -->
+        <button type="submit" class="btn-place-order">
+            Place Order - £{{ '%.2f'|format(subtotal) }}
+        </button>
+
+    </form>
+</div>
+{% endblock %} 

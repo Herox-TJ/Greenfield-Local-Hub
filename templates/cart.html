@@ -2,69 +2,99 @@
 {% block title %}Shopping Cart - Greenfield Local Hub{% endblock %}
 
 {% block content %}
-<div class="cart-page">
+{% if cart_items %}
+<div class="cart-layout">
+    <!-- left column: items -->
+    <div class="cart-items-col">
+        <h1>Shopping Cart</h1>
+        <div class="cart-list">
+            {% for item in cart_items %}
+            <div class="cart-item">
+                <!-- image -->
+                {% if item.product.image %}
+                <img src="{{ item.product.image }}" alt="{{ item.product.name }}"
+                     class="cart-item-img">
+                {% else %}
+                <div class="cart-item-img-ph"><img src="{{ url_for('static', filename='images/icons/leaf.svg') }}" alt="leaf" class="icon-svg"></div>
+                {% endif %}
+
+                <!-- details -->
+                <div>
+                    <div class="cart-item-name">{{ item.product.name }}</div>
+                    <div class="cart-item-price">
+                        £{{ '%.2f'|format(item.product.price) }} / {{ item.product.unit }}
+                    </div>
+                    <div class="cart-item-controls">
+                        <!-- quantity controls -->
+                        <div class="cart-item-qty">
+                            <button type="button" class="cart-qty-btn"
+                                    data-action="dec" data-item-id="{{ item.id }}">-</button>
+                            <input type="number" class="cart-qty-num"
+                                   value="{{ item.quantity }}" min="1"
+                                   max="{{ item.product.stock }}"
+                                   data-item-id="{{ item.id }}" readonly>
+                            <button type="button" class="cart-qty-btn"
+                                    data-action="inc" data-item-id="{{ item.id }}">+</button>
+                        </div>
+                        <!-- hidden update form -->
+                        <form method="POST" action="{{ url_for('cart_update') }}"
+                              class="cart-update-form" data-item-id="{{ item.id }}"
+                              style="display:none;">
+                            <input type="hidden" name="item_id" value="{{ item.id }}">
+                            <input type="hidden" name="quantity" value="{{ item.quantity }}">
+                        </form>
+                        <!-- trash/delete form -->
+                        <form method="POST" action="{{ url_for('cart_remove', item_id=item.id) }}">
+                            <button type="submit" class="cart-trash-btn" title="Remove item">Remove</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- right column: order summary -->
+    <div>
+        <div class="cart-summary-card">
+            <h3>Order Summary</h3>
+
+            <div class="summary-row">
+                <span class="label">Subtotal</span>
+                <span>£{{ '%.2f'|format(total) }}</span>
+            </div>
+            <div class="summary-row">
+                <span class="label">Delivery</span>
+                <span class="delivery">Free</span>
+            </div>
+
+            <hr class="summary-divider">
+
+            <div class="summary-row summary-total">
+                <span>Total</span>
+                <span class="amount">£{{ '%.2f'|format(total) }}</span>
+            </div>
+
+            <a href="{{ url_for('checkout') }}" class="btn-proceed">
+                Proceed to Checkout <img src="{{ url_for('static', filename='images/icons/arrow-right.svg') }}" alt="arrow right" class="icon-svg">
+            </a>
+            <a href="{{ url_for('products') }}" class="continue-link">
+                Continue Shopping
+            </a>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<div class="cart-empty-wrap">
     <h1>Shopping Cart</h1>
-
-    {% if cart_items %}
-    <div class="cart-list">
-        {% for item in cart_items %}
-        <div class="cart-item">
-            <!-- image -->
-            {% if item.product.image %}
-            <img src="{{ item.product.image }}" alt="{{ item.product.name }}"
-                 class="cart-item-img">
-            {% else %}
-            <div class="cart-item-img-ph"><img src="{{ url_for('static', filename='images/icons/leaf.svg') }}" alt="leaf" class="icon-svg"></div>
-            {% endif %}
-
-            <!-- details -->
-            <div>
-                <div class="cart-item-name">{{ item.product.name }}</div>
-                <div class="cart-item-price">
-                    £{{ '%.2f'|format(item.product.price) }} / {{ item.product.unit }}
-                </div>
-                <div class="cart-qty-row">
-                    <form method="POST" action="{{ url_for('cart_update') }}"
-                          style="display:inline-flex;align-items:center;gap:.4rem;">
-                        <input type="hidden" name="item_id" value="{{ item.id }}">
-                        <input type="number" name="quantity" value="{{ item.quantity }}"
-                               min="0" max="{{ item.product.stock }}"
-                               class="cart-qty-input">
-                        <button type="submit"
-                                style="background:var(--bg);border:1px solid var(--border);
-                                       padding:.3rem .7rem;border-radius:6px;cursor:pointer;
-                                       font-size:.8rem;">
-                            Update
-                        </button>
-                    </form>
-                    <form method="POST" action="{{ url_for('cart_remove', item_id=item.id) }}">
-                        <button type="submit" class="btn-remove">Remove</button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- subtotal -->
-            <div class="cart-item-sub">
-                £{{ '%.2f'|format(item.subtotal) }}
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-
-    <div class="cart-summary">
-        <div class="cart-total-row">
-            Total: <span>£{{ '%.2f'|format(total) }}</span>
-        </div>
-        <button class="btn-checkout">Proceed to Checkout</button>
-    </div>
-
-    {% else %}
     <div class="cart-empty">
         <div class="cart-empty-icon"><img src="{{ url_for('static', filename='images/icons/shopping-cart.svg') }}" alt="cart" class="icon-svg"></div>
         <h2>Your Cart is Empty</h2>
         <p>Start adding some fresh local produce to your cart!</p>
         <a href="{{ url_for('products') }}" class="btn-teal">Browse Products</a>
     </div>
-    {% endif %}
 </div>
+{% endif %}
+
 {% endblock %} 
