@@ -28,6 +28,97 @@
         </div>
     </div>
 
+    <!-- producer profile -->
+    <div class="dash-card" style="margin-bottom:1.5rem;">
+        <div class="dash-card-title">Producer Profile</div>
+        <form method="POST" action="{{ url_for('producer_update_profile') }}" enctype="multipart/form-data">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:.75rem;">
+                <div>
+                    <label class="form-label">Farm / Producer Name</label>
+                    <input type="text" name="name" value="{{ producer.name if producer else '' }}" class="form-input">
+                </div>
+                <div>
+                    <label class="form-label">Location</label>
+                    <input type="text" name="location" value="{{ producer.location if producer else '' }}" placeholder="e.g. Devon, UK" class="form-input">
+                </div>
+                <div>
+                    <label class="form-label">Farming Methods <span style="font-weight:400;color:var(--text-light);">(comma-separated)</span></label>
+                    <input type="text" name="farming_methods" value="{{ producer.farming_methods if producer else '' }}" placeholder="e.g. Organic, Free-range" class="form-input">
+                </div>
+                <div>
+                    <label class="form-label">Certifications <span style="font-weight:400;color:var(--text-light);">(comma-separated)</span></label>
+                    <input type="text" name="certifications" value="{{ producer.certifications if producer else '' }}" placeholder="e.g. Soil Association, Red Tractor" class="form-input">
+                </div>
+                <div>
+                    <label class="form-label">Profile Image</label>
+                    {% if producer and producer.image %}
+                    <div style="margin-bottom:.5rem;">
+                        <img src="{{ producer.image }}" alt="current profile image"
+                             style="width:80px;height:60px;object-fit:cover;border-radius:6px;border:1px solid #e2e8f0;display:block;">
+                        <span style="font-size:.75rem;color:var(--text-light);">Current image — upload below to replace</span>
+                    </div>
+                    {% endif %}
+                    <input type="file" name="banner" accept="image/*" class="form-input" style="padding:.4rem .75rem;">
+                    <div style="font-size:.75rem;color:var(--text-light);margin-top:.25rem;">Shown on the public Producers page.</div>
+                </div>
+                <div style="grid-column:1/3;">
+                    <label class="form-label">Description</label>
+                    <textarea name="description" rows="3" class="form-input" style="resize:vertical;">{{ producer.description if producer else '' }}</textarea>
+                </div>
+            </div>
+            <div style="margin-top:1rem;">
+                <button type="submit" class="btn-green">Save Profile</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- add product form -->
+    <div class="dash-card" style="margin-bottom:1.5rem;">
+        <div class="dash-card-title">Add New Product</div>
+        <form method="POST" action="{{ url_for('producer_add_product') }}" enctype="multipart/form-data">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:.75rem;">
+                <div>
+                    <label class="form-label">Product Name *</label>
+                    <input type="text" name="name" required placeholder="e.g. Organic Carrots" class="form-input">
+                </div>
+                <div>
+                    <label class="form-label">Category</label>
+                    <select name="category" class="form-input">
+                        <option value="">-- Select --</option>
+                        <option value="Vegetables">Vegetables</option>
+                        <option value="Fruits">Fruits</option>
+                        <option value="Dairy">Dairy</option>
+                        <option value="Bakery">Bakery</option>
+                        <option value="Meat">Meat</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label">Price (£) *</label>
+                    <input type="number" name="price" required min="0.01" step="0.01" placeholder="0.00" class="form-input">
+                </div>
+                <div>
+                    <label class="form-label">Unit</label>
+                    <input type="text" name="unit" placeholder="e.g. 1kg, each, 250g" class="form-input">
+                </div>
+                <div>
+                    <label class="form-label">Stock Quantity</label>
+                    <input type="number" name="stock" min="0" value="0" class="form-input">
+                </div>
+                <div>
+                    <label class="form-label">Product Image</label>
+                    <input type="file" name="image" accept="image/*" class="form-input" style="padding:.4rem .75rem;">
+                </div>
+                <div style="grid-column:1/3;">
+                    <label class="form-label">Description</label>
+                    <textarea name="description" rows="3" placeholder="Describe your product..." class="form-input" style="resize:vertical;"></textarea>
+                </div>
+            </div>
+            <div style="margin-top:1rem;">
+                <button type="submit" class="btn-green">Upload Product</button>
+            </div>
+        </form>
+    </div>
+
     <!-- products + orders -->
     <div class="dash-two-col">
         <!-- my products -->
@@ -35,7 +126,7 @@
             <div class="dash-card-title">My Products</div>
             {% if products %}
             {% for p in products %}
-            <div class="prod-list-row">
+            <div class="prod-list-row" style="flex-wrap:wrap;">
                 {% if p.image %}
                 <img src="{{ p.image }}" alt="{{ p.name }}" class="prod-list-img">
                 {% else %}
@@ -53,12 +144,72 @@
                 {% else %}
                 <span class="badge-out">Out of Stock</span>
                 {% endif %}
+                <button type="button" onclick="toggleEditForm('{{p.id}}', '{{ p.name }}')"
+                        style="background:#3182ce;color:#fff;border:none;border-radius:5px;padding:.3rem .7rem;font-size:.78rem;cursor:pointer;margin-left:.5rem;">
+                    Edit
+                </button>
+                <form method="POST" action="{{ url_for('producer_delete_product', product_id=p.id) }}"
+                      onsubmit="return confirm('Delete {{ p.name }}? This cannot be undone.');"
+                      style="margin-left:.4rem;display:inline;">
+                    <button type="submit"
+                            style="background:#e53e3e;color:#fff;border:none;border-radius:5px;padding:.3rem .7rem;font-size:.78rem;cursor:pointer;">
+                        Delete
+                    </button>
+                </form>
+
+                <!-- inline edit form (hidden until Edit is clicked) -->
+                <div id="edit-form-{{ p.id }}" style="display:none;width:100%;margin-top:.75rem;padding:.85rem;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+                    <form method="POST" action="{{ url_for('producer_edit_product', product_id=p.id) }}" enctype="multipart/form-data">
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+                            <div>
+                                <label class="form-label">Product Name *</label>
+                                <input type="text" name="name" required value="{{ p.name }}" class="form-input">
+                            </div>
+                            <div>
+                                <label class="form-label">Category</label>
+                                <select name="category" class="form-input">
+                                    <option value="">-- Select --</option>
+                                    {% for cat in ['Vegetables','Fruits','Dairy','Bakery','Meat'] %}
+                                    <option value="{{ cat }}" {% if p.category == cat %}selected{% endif %}>{{ cat }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div>
+                                <label class="form-label">Price (£) *</label>
+                                <input type="number" name="price" required min="0.01" step="0.01" value="{{ '%.2f'|format(p.price) }}" class="form-input">
+                            </div>
+                            <div>
+                                <label class="form-label">Unit</label>
+                                <input type="text" name="unit" value="{{ p.unit or '' }}" placeholder="e.g. 1kg, each" class="form-input">
+                            </div>
+                            <div>
+                                <label class="form-label">Stock Quantity</label>
+                                <input type="number" name="stock" min="0" value="{{ p.stock }}" class="form-input">
+                            </div>
+                            <div>
+                                <label class="form-label">Replace Image</label>
+                                <input type="file" name="image" accept="image/*" class="form-input" style="padding:.35rem .7rem;">
+                            </div>
+                            <div style="grid-column:1/3;">
+                                <label class="form-label">Description</label>
+                                <textarea name="description" rows="2" class="form-input" style="resize:vertical;">{{ p.description or '' }}</textarea>
+                            </div>
+                        </div>
+                        <div style="margin-top:.75rem;display:flex;gap:.5rem;">
+                            <button type="submit" class="btn-green" style="font-size:.85rem;padding:.45rem 1.1rem;">Save Changes</button>
+                            <button type="button" onclick="toggleEditForm('{{ p.id }}', '{{ p.name }}')"
+                                    style="background:#e2e8f0;color:#333;border:none;border-radius:6px;padding:.45rem 1.1rem;font-size:.85rem;cursor:pointer;">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
             {% endfor %}
             {% else %}
             <div class="empty-state">
                 <div class="empty-icon"><img src="{{ url_for('static', filename='images/icons/package.svg') }}" alt="package" class="icon-svg"></div>
-                <p>No products listed yet</p>
+                <p>No products yet. Use the form above to add your first product.</p>
             </div>
             {% endif %}
         </div>
@@ -88,4 +239,50 @@
         </div>
     </div>
 </div>
+
+<style>
+.form-label { 
+    font-size:.82rem; 
+    font-weight:600; 
+    display:block; 
+    margin-bottom:.3rem; 
+}
+
+.form-input { 
+    width:100%; 
+    padding:.5rem .75rem; 
+    border:1px solid #ddd; 
+    border-radius:6px; 
+    font-size:.88rem; 
+    box-sizing:border-box; 
+}
+
+.form-input:focus { 
+    outline:none; 
+    border-color:var(--green,#1e9b7d); 
+    box-shadow:0 0 0 2px rgba(30,155,125,.15); 
+}
+
+.btn-green { 
+    background:var(--green,#1e9b7d); 
+    color:#fff; 
+    border:none; 
+    border-radius:6px; 
+    padding:.55rem 1.4rem; 
+    font-size:.88rem; 
+    font-weight:600; 
+    cursor:pointer; 
+}
+
+.btn-green:hover { 
+    opacity:.9; 
+}
+</style>
+
+<script>
+function toggleEditForm(productId) {
+    var form = document.getElementById('edit-form-' + productId);
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+}
+</script>
 {% endblock %} 

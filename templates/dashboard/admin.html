@@ -32,6 +32,74 @@
         </div>
     </div>
 
+    <!-- user management -->
+    <div class="dash-card" style="margin-bottom:1.5rem;">
+        <div class="dash-card-title">User Management</div>
+        <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;font-size:.85rem;">
+                <thead>
+                    <tr style="border-bottom:2px solid #e2e8f0;text-align:left;">
+                        <th style="padding:.6rem .75rem;color:var(--text-light);font-weight:600;">ID</th>
+                        <th style="padding:.6rem .75rem;color:var(--text-light);font-weight:600;">Name</th>
+                        <th style="padding:.6rem .75rem;color:var(--text-light);font-weight:600;">Email</th>
+                        <th style="padding:.6rem .75rem;color:var(--text-light);font-weight:600;">Role</th>
+                        <th style="padding:.6rem .75rem;color:var(--text-light);font-weight:600;">Status</th>
+                        <th style="padding:.6rem .75rem;color:var(--text-light);font-weight:600;">Joined</th>
+                        <th style="padding:.6rem .75rem;color:var(--text-light);font-weight:600;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in users %}
+                    <tr style="border-bottom:1px solid #f0f0f0;">
+                        <td style="padding:.6rem .75rem;color:var(--text-light);">{{ u.id }}</td>
+                        <td style="padding:.6rem .75rem;font-weight:600;">{{ u.full_name }}</td>
+                        <td style="padding:.6rem .75rem;">{{ u.email }}</td>
+                        <td style="padding:.6rem .75rem;">
+                            <span style="background:{% if u.role == 'admin' %}#ebf4ff;color:#3182ce{% elif u.role == 'producer' %}#f0fff4;color:#276749{% else %}#faf5ff;color:#6b46c1{% endif %};padding:.2rem .55rem;border-radius:999px;font-size:.75rem;font-weight:600;">
+                                {{ u.role|capitalize }}
+                            </span>
+                        </td>
+                        <td style="padding:.6rem .75rem;">
+                            {% if u.is_active %}
+                            <span style="background:#f0fff4;color:#276749;padding:.2rem .55rem;border-radius:999px;font-size:.75rem;font-weight:600;">Active</span>
+                            {% else %}
+                            <span style="background:#fff5f5;color:#c53030;padding:.2rem .55rem;border-radius:999px;font-size:.75rem;font-weight:600;">Deactivated</span>
+                            {% endif %}
+                        </td>
+                        <td style="padding:.6rem .75rem;color:var(--text-light);">{{ u.created_at.strftime('%d %b %Y') }}</td>
+                        <td style="padding:.6rem .75rem;">
+                            {% if u.id != user.id %}
+                            <div style="display:flex;gap:.4rem;">
+                                <form method="POST" action="{{ url_for('admin_deactivate_user', user_id=u.id) }}">
+                                    <button type="submit"
+                                            style="background:{% if u.is_active %}#ed8936{% else %}#48bb78{% endif %};color:#fff;border:none;border-radius:5px;padding:.28rem .65rem;font-size:.75rem;cursor:pointer;white-space:nowrap;">
+                                        {% if u.is_active %}Deactivate{% else %}Activate{% endif %}
+                                    </button>
+                                </form>
+                                <form method="POST" action="{{ url_for('admin_delete_user', user_id=u.id) }}"
+                                      onsubmit="return confirm('Permanently delete {{ u.full_name }}\'s account? This cannot be undone.');">
+                                    <button type="submit"
+                                            style="background:#e53e3e;color:#fff;border:none;border-radius:5px;padding:.28rem .65rem;font-size:.75rem;cursor:pointer;">
+                                        Delete
+                                    </button>
+                                </form>
+                            </div>
+                            {% else %}
+                            <span style="color:var(--text-light);font-size:.78rem;">You</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% if not users %}
+            <div class="empty-state">
+                <p>No users found.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
     <!-- orders + categories -->
     <div class="dash-two-col" style="margin-bottom:1.5rem;">
         <!-- recent orders -->
@@ -67,7 +135,7 @@
                 <span class="bar-lbl">{{ cat }}</span>
                 <div class="bar-track">
                     <div class="bar-fill"
-                         style="width: {{ (count / max_count * 100)|int }}%"></div>
+                         style="width:{{ (count / max_count * 100)|int }}%"></div>
                 </div>
                 <span class="bar-cnt">{{ count }}</span>
             </div>

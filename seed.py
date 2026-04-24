@@ -1,4 +1,4 @@
-"""Run once to populate the database with sample data.
+"""Run once to populate the database with the sample data below.
    Usage: python seed.py
    Credentials:
      Admin:    admin@greenfield.com  / admin123

@@ -1,9 +1,18 @@
 from flask import (Flask, render_template, request, redirect, url_for, session, flash)
-from model import db, User, Producer, Product, CartItem, Order, OrderItem
+from model import db, User, Producer, Product, CartItem, Order, OrderItem, Payment, LoyaltyScheme, AuditLog
 from functools import wraps
 from sqlalchemy import text
 from sqlalchemy.orm import joinedload, subqueryload
 import uuid
+import os
+from werkzeug.utils import secure_filename
+
+UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'static', 'images', 'products')
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'greenfield-local-hub-2026'
@@ -498,6 +507,151 @@ def dashboard_producer():
                            orders=orders)
 
 
+@app.route('/dashboard/producer/profile/update', methods=['POST'])
+@login_required
+def producer_update_profile():
+    user = get_current_user()
+    if user.role != 'producer':
+        return redirect(url_for(f'dashboard_{user.role}'))
+    producer = Producer.query.filter_by(user_id=user.id).first()
+    if not producer:
+        flash('No producer profile found.', 'error')
+        return redirect(url_for('dashboard_producer'))
+
+    producer.name = request.form.get('name', producer.name).strip() or producer.name
+    producer.description = request.form.get('description', '').strip()
+    producer.location = request.form.get('location', '').strip()
+    producer.farming_methods = request.form.get('farming_methods', '').strip()
+    producer.certifications = request.form.get('certifications', '').strip()
+
+    if 'banner' in request.files:
+        file = request.files['banner']
+        if file and file.filename and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            banner_folder = os.path.join(os.path.dirname(__file__), 'static', 'images', 'producers')
+            os.makedirs(banner_folder, exist_ok=True)
+            file.save(os.path.join(banner_folder, filename))
+            producer.image = url_for('static', filename=f'images/producers/{filename}')
+
+    db.session.commit()
+    flash('Producer profile updated successfully!', 'success')
+    return redirect(url_for('dashboard_producer'))
+
+
+@app.route('/dashboard/producer/product/add', methods=['POST'])
+@login_required
+def producer_add_product():
+    user = get_current_user()
+    if user.role != 'producer':
+        return redirect(url_for(f'dashboard_{user.role}'))
+    producer = Producer.query.filter_by(user_id=user.id).first()
+    if not producer:
+        flash('No producer profile found.', 'error')
+        return redirect(url_for('dashboard_producer'))
+
+    name = request.form.get('name', '').strip()
+    description = request.form.get('description', '').strip()
+    price = request.form.get('price', type=float)
+    unit = request.form.get('unit', '').strip()
+    stock = request.form.get('stock', 0, type=int)
+    category = request.form.get('category', '').strip()
+
+    if not name or price is None:
+        flash('Product name and price are required.', 'error')
+        return redirect(url_for('dashboard_producer'))
+
+    image_path = None
+    if 'image' in request.files:
+        file = request.files['image']
+        if file and file.filename and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+            file.save(os.path.join(UPLOAD_FOLDER, filename))
+            image_path = url_for('static', filename=f'images/products/{filename}')
+
+    slug = name.lower().replace(' ', '-') + '-' + uuid.uuid4().hex[:6]
+    product = Product(
+        producer_id=producer.id,
+        name=name,
+        slug=slug,
+        description=description,
+        price=price,
+        unit=unit,
+        stock=stock,
+        category=category,
+        image=image_path,
+        is_available=True
+    )
+    db.session.add(product)
+    db.session.commit()
+    flash(f'Product "{name}" added successfully!', 'success')
+    return redirect(url_for('dashboard_producer'))
+
+
+@app.route('/dashboard/producer/product/<int:product_id>/edit', methods=['POST'])
+@login_required
+def producer_edit_product(product_id):
+    user = get_current_user()
+    if user.role != 'producer':
+        return redirect(url_for(f'dashboard_{user.role}'))
+    producer = Producer.query.filter_by(user_id=user.id).first()
+    product = db.session.get(Product, product_id)
+    if not product or not producer or product.producer_id != producer.id:
+        flash('Product not found.', 'error')
+        return redirect(url_for('dashboard_producer'))
+
+    name = request.form.get('name', '').strip()
+    description = request.form.get('description', '').strip()
+    price = request.form.get('price', type=float)
+    unit = request.form.get('unit', '').strip()
+    stock = request.form.get('stock', type=int)
+    category = request.form.get('category', '').strip()
+
+    if not name or price is None:
+        flash('Product name and price are required.', 'error')
+        return redirect(url_for('dashboard_producer'))
+
+    product.name = name
+    product.description = description
+    product.price = price
+    product.unit = unit
+    if stock is not None:
+        product.stock = stock
+    product.category = category
+
+    if 'image' in request.files:
+        file = request.files['image']
+        if file and file.filename and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+            file.save(os.path.join(UPLOAD_FOLDER, filename))
+            product.image = url_for('static', filename=f'images/products/{filename}')
+
+    db.session.commit()
+    flash(f'Product "{name}" updated successfully!', 'success')
+    return redirect(url_for('dashboard_producer'))
+
+
+@app.route('/dashboard/producer/product/<int:product_id>/delete', methods=['POST'])
+@login_required
+def producer_delete_product(product_id):
+    user = get_current_user()
+    if user.role != 'producer':
+        return redirect(url_for(f'dashboard_{user.role}'))
+    producer = Producer.query.filter_by(user_id=user.id).first()
+    product = db.session.get(Product, product_id)
+    if not product or not producer or product.producer_id != producer.id:
+        flash('Product not found.', 'error')
+        return redirect(url_for('dashboard_producer'))
+    name = product.name
+    CartItem.query.filter_by(product_id=product_id).delete()
+    OrderItem.query.filter_by(product_id=product_id).delete()
+    db.session.delete(product)
+    db.session.commit()
+    flash(f'Product "{name}" deleted.', 'success')
+    return redirect(url_for('dashboard_producer'))
+
+
 @app.route('/dashboard/admin')
 @login_required
 def dashboard_admin():
@@ -517,6 +671,68 @@ def dashboard_admin():
                            users=all_users, products=all_products,
                            producers=all_producers, orders=all_orders,
                            total_revenue=total_revenue, categories=categories)
+
+
+@app.route('/dashboard/admin/user/<int:user_id>/deactivate', methods=['POST'])
+@login_required
+def admin_deactivate_user(user_id):
+    user = get_current_user()
+    if user.role != 'admin':
+        return redirect(url_for(f'dashboard_{user.role}'))
+    target = db.session.get(User, user_id)
+    if not target:
+        flash('User not found.', 'error')
+    elif target.id == user.id:
+        flash('You cannot deactivate your own account.', 'error')
+    else:
+        target.is_active = not target.is_active
+        db.session.commit()
+        status = 'activated' if target.is_active else 'deactivated'
+        flash(f'Account for {target.full_name} has been {status}.', 'success')
+    return redirect(url_for('dashboard_admin'))
+
+
+@app.route('/dashboard/admin/user/<int:user_id>/delete', methods=['POST'])
+@login_required
+def admin_delete_user(user_id):
+    user = get_current_user()
+    if user.role != 'admin':
+        return redirect(url_for(f'dashboard_{user.role}'))
+    target = db.session.get(User, user_id)
+    if not target:
+        flash('User not found.', 'error')
+    elif target.id == user.id:
+        flash('You cannot delete your own account.', 'error')
+    else:
+        name = target.full_name
+
+        # clear cart items
+        CartItem.query.filter_by(user_id=target.id).delete()
+
+        # clear orders and their children
+        for order in Order.query.filter_by(user_id=target.id).all():
+            OrderItem.query.filter_by(order_id=order.id).delete()
+            Payment.query.filter_by(order_id=order.id).delete()
+        Payment.query.filter_by(user_id=target.id).delete()
+        Order.query.filter_by(user_id=target.id).delete()
+
+        # clear loyalty and audit records
+        LoyaltyScheme.query.filter_by(user_id=target.id).delete()
+        AuditLog.query.filter_by(user_id=target.id).delete()
+
+        # if producer: clear their products and related records first
+        producer = Producer.query.filter_by(user_id=target.id).first()
+        if producer:
+            for product in Product.query.filter_by(producer_id=producer.id).all():
+                CartItem.query.filter_by(product_id=product.id).delete()
+                OrderItem.query.filter_by(product_id=product.id).delete()
+                db.session.delete(product)
+            db.session.delete(producer)
+
+        db.session.delete(target)
+        db.session.commit()
+        flash(f'Account for {name} has been permanently deleted.', 'success')
+    return redirect(url_for('dashboard_admin'))
 
 
 #init

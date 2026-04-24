@@ -30,7 +30,7 @@
     </div>
 
     <div class="nav-right">
-        <button id="theme-toggle" class="theme-btn" title="Toggle dark mode"><img src="{{ url_for('static', filename='images/icons/moon.svg') }}" alt="Toggle" class="icon-svg"></button>
+        <button id="theme-toggle" class="theme-btn" title="Toggle dark mode">☾</button>
         <a href="{{ url_for('cart') }}" class="nav-cart">
             <img src="{{ url_for('static', filename='images/icons/shopping-cart.svg') }}" alt="cart" class="icon-svg">
             {% if cart_count > 0 %}
